@@ -1,7 +1,13 @@
 import os
 import dotenv
 
-from flask import Flask, request, jsonify
+from flask import (
+    Flask, 
+    request, 
+    jsonify,
+    redirect,
+)
+
 from pathlib import Path
 
 from src.data.arxiv_downloader import ArxivDownloader
@@ -33,11 +39,15 @@ def startup():
     ARXIV_DOWNLOADER.retrieve_arxiv_articles_df()
     MODEL = CohereModel()
 
+@app.route('/', methods=['GET'])
+def index():
+    return redirect('/health')
+
 @app.route('/health', methods=['GET'])
 def health():
     return {'status': 'OK'}, 200
 
-@app.route('/query', methods=['POST'])
+@app.route('/api/query', methods=['POST'])
 def query():
     data = request.json
     query = data.get('query', None)
