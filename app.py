@@ -10,7 +10,8 @@ from src.utils import (
     compute_top_k,
 )
 from flask_config import (
-    TOP_K
+    TOP_K,
+    RECORD_KEYS,
 )
 
 # Load environment variables if in dev env
@@ -53,6 +54,6 @@ def query():
 
     # Find top k similar articles to query
     top_k_indices = compute_top_k(query_embedding, article_embeddings, k=TOP_K)
-    records = articles_df.iloc[top_k_indices][['link', 'updated_ts', 'published_ts', 'title', 'summary', 'author', 'category']].to_dict(orient='records')
+    records = articles_df.iloc[top_k_indices][RECORD_KEYS].to_dict(orient='records')
 
     return jsonify({'data': records})
