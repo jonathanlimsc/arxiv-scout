@@ -14,8 +14,8 @@ from flask_config import (
     RECORD_KEYS,
 )
 
-# Load environment variables if in dev env
-if os.environ.get('ENVIRONMENT') == 'dev':
+# Load environment variables from dotenv file if in dev env
+if os.environ.get('ENVIRONMENT', 'dev') == 'dev':
     PROJ_DIR = Path.cwd()
     DOTENV_PATH = PROJ_DIR / '.env'
     dotenv.load_dotenv(DOTENV_PATH)
