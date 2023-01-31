@@ -6,6 +6,7 @@ from flask import (
     request, 
     jsonify,
     redirect,
+    Response
 )
 
 from pathlib import Path
@@ -31,6 +32,13 @@ app = Flask(__name__)
 ARXIV_DOWNLOADER = None
 MODEL = None
 
+def _build_cors_preflight_response():
+    res = Response()
+    res.headers.add("Access-Control-Allow-Origin", "*")
+    res.headers.add('Access-Control-Allow-Headers', "*")
+    res.headers.add('Access-Control-Allow-Methods', "*")
+    return res
+
 @app.before_first_request
 def startup():
     global ARXIV_DOWNLOADER
@@ -47,8 +55,13 @@ def index():
 def health():
     return {'status': 'OK'}, 200
 
-@app.route('/api/query', methods=['POST'])
+@app.route('/api/query', methods=['POST', 'OPTIONS'])
 def query():
+    # Handle CORS pre-flight request
+    # Reference: https://dothanhlong.org/how-to-enable-cors-in-python-flask/
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+
     data = request.json
     query = data.get('query', None)
     if query is None:
