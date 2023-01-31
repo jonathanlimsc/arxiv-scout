@@ -67,5 +67,7 @@ def query():
     records = articles_df.iloc[top_k_indices][RECORD_KEYS].to_dict(orient='records')
     res = jsonify({'data': records})
     # To allow CORS
+    # References: https://dev.to/authress/i-got-a-cors-error-now-what-hpb
+    # https://stackoverflow.com/questions/26980713/solve-cross-origin-resource-sharing-with-flask
     res.headers.add('Access-Control-Allow-Origin', '*')
     return res
