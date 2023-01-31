@@ -65,5 +65,7 @@ def query():
     # Find top k similar articles to query
     top_k_indices = compute_top_k(query_embedding, article_embeddings, k=TOP_K)
     records = articles_df.iloc[top_k_indices][RECORD_KEYS].to_dict(orient='records')
-
-    return jsonify({'data': records})
+    res = jsonify({'data': records})
+    # To allow CORS
+    res.headers.add('Access-Control-Allow-Origin', '*')
+    return res
