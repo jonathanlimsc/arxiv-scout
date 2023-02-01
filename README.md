@@ -1,7 +1,52 @@
 arxiv-scout
 ==============================
 
-Embedding-based search for Arxiv papers
+Semantic embedding-based search for the latest Arxiv papers 
+
+[App Demo](https://jonathanlimsc.com/projects/arxiv-scout/app) | [Blogpost](https://jonathanlimsc.com/projects/arxiv-scout/)
+
+![Arxiv Scout App](assets/arxiv-scout-screenshot.png)
+
+## Installation
+
+1. Create a conda environment and pip install dependencies.
+```
+conda create -n arxiv-scout python=3.8
+conda activate arxiv-scout
+pip install -r requirements.txt
+```
+
+2. Run notebooks in the `/notebooks` directory.
+```
+jupyter notebook
+```
+
+3. Run the Flask application to query
+```
+flask --app app:app run
+```
+
+### Example request
+**POST /api/query**
+```
+import requests
+import json
+
+url = "localhost:5000/api/query"
+
+payload = json.dumps({
+  "query": "Attention transformers are all you need"
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+
+
+```
 
 Project Organization
 ------------
@@ -34,21 +79,22 @@ Project Organization
     ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
+    │   ├── constants.py   <- Global constants that can be used by any module
+    │   ├── utils.py       <- Utility functions
     │   │
     │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   │   └── arxiv_downloader.py <- Contains ArxivDownloader class to handle communication to Arxiv API
     │   │
     │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
     │   │
     │   ├── models         <- Scripts to train models and then use trained models to make
     │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
+    │   │   ├── cohere.py  <- CohereModel class to instantiate connections and make requests to Cohere API for embeddings
+    │   │ 
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
-    │
+    ├── app.py             <- Flask microservice app that is deployed as the backend on Render
+    ├── flask_config.py    <- Configurations for Flask app
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
 
