@@ -15,11 +15,19 @@ class ArxivDownloader():
         self.latest_results = None
 
     def retrieve_arxiv_articles_df(self) -> pd.DataFrame:
+        """
+        Retrieves Arxiv article dataframe
+
+        Returns
+            articles_df: Arxiv article dataframe
+            is_from_cache: Whether the documents were a cached copy. This can usefully be passed to downstream models to return a cached version of document embeddings for fast response times
+        """
         # Max results in one go is 1000
         url = f"http://export.arxiv.org/api/query?search_query={ARXIV_QUERY_STR}&start=0&max_results=1000"
         
         curr_time = datetime.now()
-        
+        is_from_cache = None
+
         if self.last_download_time is None or (curr_time - self.last_download_time) > timedelta(days=self.download_refresh_interval_days):
             payload={}
             headers = {}
@@ -58,9 +66,11 @@ class ArxivDownloader():
             # Update cache
             self.latest_results = articles_df
             self.last_download_time = curr_time
+            is_from_cache = False
 
         # Retrieve from cache
         else:
             articles_df = self.latest_results
+            is_from_cache = True
 
-        return articles_df
+        return articles_df, is_from_cache

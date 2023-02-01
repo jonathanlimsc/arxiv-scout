@@ -68,10 +68,10 @@ def query():
         return jsonify({'data': []})
 
     # Retrieve article data
-    articles_df = ARXIV_DOWNLOADER.retrieve_arxiv_articles_df()
+    articles_df, is_from_cache = ARXIV_DOWNLOADER.retrieve_arxiv_articles_df()
 
     # Generate embeddings from model
-    res_embeddings = MODEL.get_embeddings(texts=[query]+list(articles_df['combined_text']))
+    res_embeddings = MODEL.get_embeddings(texts=[query]+list(articles_df['combined_text']), from_cache=is_from_cache)
     query_embedding = res_embeddings[0]
     article_embeddings = res_embeddings[1:]
 

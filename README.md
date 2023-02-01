@@ -16,12 +16,18 @@ conda activate arxiv-scout
 pip install -r requirements.txt
 ```
 
-2. Run notebooks in the `/notebooks` directory.
+2. Sign up for a [Cohere developer account](https://dashboard.cohere.ai/) and create a .env file at the project root directory. Initialize the environment variable `COHERE_API_KEY` with your Cohere API key. This is necessary for the dev environment. To run in production, set the environment variable `COHERE_API_KEY` to your Cohere API key via your production platform's secrets or environment variables management system.
+```
+# In .env file
+COHERE_API_KEY = <YOUR_API_KEY_HERE>
+```
+
+3. Run notebooks in the `/notebooks` directory.
 ```
 jupyter notebook
 ```
 
-3. Run the Flask application to query
+4. Run the Flask application to query
 ```
 flask --app app:app run
 ```
