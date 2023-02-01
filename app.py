@@ -76,8 +76,10 @@ def query():
     article_embeddings = res_embeddings[1:]
 
     # Find top k similar articles to query
-    top_k_indices = compute_top_k(query_embedding, article_embeddings, k=TOP_K)
-    records = articles_df.iloc[top_k_indices][RECORD_KEYS].to_dict(orient='records')
+    top_k_indices, similarity_scores = compute_top_k(query_embedding, article_embeddings, k=TOP_K)
+    results_df = articles_df.iloc[top_k_indices]
+    results_df['similarity'] = similarity_scores
+    records = results_df[RECORD_KEYS].to_dict(orient='records')
     res = jsonify({'data': records})
     # To allow CORS
     # References: https://dev.to/authress/i-got-a-cors-error-now-what-hpb
