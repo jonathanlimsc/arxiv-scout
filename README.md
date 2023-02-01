@@ -1,5 +1,6 @@
 arxiv-scout
 ==============================
+[![DOI](https://zenodo.org/badge/595349248.svg)](https://zenodo.org/badge/latestdoi/595349248)
 
 Semantic embedding-based search for the latest Arxiv papers 
 
@@ -105,5 +106,21 @@ Project Organization
 
 
 --------
+
+## Citation
+
+If used this work or you found this work useful, please use this BibTeX to cite this repository in your publications or works:
+```
+@software{jonathan_lim_siu_chi_2023_7595801,
+  author       = {Jonathan Lim Siu Chi},
+  title        = {jonathanlimsc/arxiv-scout: Arxiv Scout v1.0},
+  month        = feb,
+  year         = 2023,
+  publisher    = {Zenodo},
+  version      = {v1.0},
+  doi          = {10.5281/zenodo.7595801},
+  url          = {https://doi.org/10.5281/zenodo.7595801}
+}
+```
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
