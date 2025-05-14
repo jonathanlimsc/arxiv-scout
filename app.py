@@ -55,6 +55,10 @@ def index():
 def health():
     return {'status': 'OK'}, 200
 
+@app.route('/api/ping', methods=['GET'])
+def ping():
+    return {'response': 'pong'}, 200
+
 @app.route('/api/query', methods=['POST', 'OPTIONS'])
 def query():
     # Handle CORS pre-flight request
