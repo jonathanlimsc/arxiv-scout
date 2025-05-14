@@ -33,10 +33,12 @@ class CohereModel():
             query_embedding = self.client.embed(texts=[texts[0]],
                                                 model=MODEL_NAME,
                                                 input_type='search_query',
-                                                truncate='END').embeddings
+                                                truncate='END').embeddings[0]
             # Get document embeddings from cache
             doc_embeddings = self.cached_embeddings
-            res_embeddings = np.concatenate([np.array(query_embedding), doc_embeddings], axis=0)
+            res_embeddings = [query_embedding]
+            res_embeddings.extend(doc_embeddings)
+            res_embeddings = np.array(res_embeddings)
         else:
             # Retrieve embeddings from model for all the texts
             res_embeddings = []
@@ -45,8 +47,8 @@ class CohereModel():
             query_embedding = self.client.embed(texts=[query_text],
                                                 model=MODEL_NAME,
                                                 input_type='search_query',
-                                                truncate='END').embeddings
-            res_embeddings.append(query_embedding[0])
+                                                truncate='END').embeddings[0]
+            res_embeddings.append(query_embedding)
 
             for i in range(0, len(doc_texts), MODEL_BATCH_SIZE):
                 batch_texts = texts[i:i + MODEL_BATCH_SIZE]
