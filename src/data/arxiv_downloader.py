@@ -1,3 +1,4 @@
+import os
 import requests
 import pandas as pd
 import xmltodict
@@ -8,6 +9,7 @@ from ..constants import ARXIV_CATEGORIES
 
 ARXIV_QUERY_STR = "+OR+".join(ARXIV_CATEGORIES)
 MAX_CHARS = 750
+MAX_NUM_PAPERS_TO_RETRIEVE = os.environ.get('MAX_NUM_PAPERS_TO_RETRIEVE', 50)
 
 class ArxivDownloader():
     def __init__(self, download_refresh_interval_days: int = 1):
@@ -24,7 +26,7 @@ class ArxivDownloader():
             is_from_cache: Whether the documents were a cached copy. This can usefully be passed to downstream models to return a cached version of document embeddings for fast response times
         """
         # Max results in one go is 1000
-        url = f"http://export.arxiv.org/api/query?search_query={ARXIV_QUERY_STR}&sortBy=lastUpdatedDate&start=0&max_results=500"
+        url = f"http://export.arxiv.org/api/query?search_query={ARXIV_QUERY_STR}&sortBy=lastUpdatedDate&start=0&max_results={MAX_NUM_PAPERS_TO_RETRIEVE}"
         
         curr_time = datetime.now()
         is_from_cache = None

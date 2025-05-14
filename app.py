@@ -44,8 +44,10 @@ def startup():
     global ARXIV_DOWNLOADER
     global MODEL
     ARXIV_DOWNLOADER = ArxivDownloader(download_refresh_interval_days=1)
-    ARXIV_DOWNLOADER.retrieve_arxiv_articles_df()
     MODEL = CohereModel()
+    # Download latest Arxiv articles and generate embeddings
+    articles_df, _ = ARXIV_DOWNLOADER.retrieve_arxiv_articles_df()
+    MODEL.populate_cache_embeddings(texts=list(articles_df['combined_text']))
 
 @app.route('/', methods=['GET'])
 def index():
