@@ -5,9 +5,9 @@ name:
  
   # Controls when the workflow will run
 on:
-  # Triggers the workflow every 5 minutes
+  # Triggers the workflow every 10 minutes to avoid Render instance inactivity threshold (15 min)
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/10 * * * *"
  
       # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,4 +20,4 @@ jobs:
     steps:
       # Runs a single command using the runners shell
       - name: Curl
-        run: curl --location --request GET 'https://arxiv-scout.onrender.com/health'
+        run: curl --location --request GET 'https://arxiv-scout.onrender.com/api/ping'
