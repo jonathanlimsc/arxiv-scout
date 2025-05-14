@@ -16,8 +16,8 @@ from src.models.cohere import CohereModel
 from src.utils import (
     compute_top_k,
 )
+from src.constants import DEFAULT_TOP_K
 from flask_config import (
-    TOP_K,
     RECORD_KEYS,
 )
 
@@ -31,6 +31,7 @@ app = Flask(__name__)
 
 ARXIV_DOWNLOADER = None
 MODEL = None
+TOP_K = int(os.environ.get('TOP_K', DEFAULT_TOP_K))
 
 def _build_cors_preflight_response():
     res = Response()

@@ -5,11 +5,14 @@ import xmltodict
 
 from datetime import datetime, timedelta
 
-from ..constants import ARXIV_CATEGORIES
+from ..constants import (
+    ARXIV_CATEGORIES, 
+    MAX_CHARS, 
+    DEFAULT_MAX_NUM_PAPERS_TO_RETRIEVE,
+)
 
 ARXIV_QUERY_STR = "+OR+".join(ARXIV_CATEGORIES)
-MAX_CHARS = 750
-MAX_NUM_PAPERS_TO_RETRIEVE = os.environ.get('MAX_NUM_PAPERS_TO_RETRIEVE', 1000)
+MAX_NUM_PAPERS_TO_RETRIEVE = os.environ.get('MAX_NUM_PAPERS_TO_RETRIEVE', DEFAULT_MAX_NUM_PAPERS_TO_RETRIEVE)
 
 class ArxivDownloader():
     def __init__(self, download_refresh_interval_days: int = 1):
