@@ -61,15 +61,15 @@ def query():
     # Reference: https://dothanhlong.org/how-to-enable-cors-in-python-flask/
     if request.method == 'OPTIONS':
         return _build_cors_preflight_response()
-
-    data = request.json
+    
+    data = request.get_json()
     query = data.get('query', None)
     if query is None:
         return jsonify({'data': []})
 
     # Retrieve article data
     articles_df, is_from_cache = ARXIV_DOWNLOADER.retrieve_arxiv_articles_df()
-
+    
     # Generate embeddings from model
     res_embeddings = MODEL.get_embeddings(texts=[query]+list(articles_df['combined_text']), from_cache=is_from_cache)
     query_embedding = res_embeddings[0]

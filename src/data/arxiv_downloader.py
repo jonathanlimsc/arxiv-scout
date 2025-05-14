@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from ..constants import ARXIV_CATEGORIES
 
 ARXIV_QUERY_STR = "+OR+".join(ARXIV_CATEGORIES)
+MAX_CHARS = 750
 
 class ArxivDownloader():
     def __init__(self, download_refresh_interval_days: int = 1):
@@ -23,7 +24,7 @@ class ArxivDownloader():
             is_from_cache: Whether the documents were a cached copy. This can usefully be passed to downstream models to return a cached version of document embeddings for fast response times
         """
         # Max results in one go is 1000
-        url = f"http://export.arxiv.org/api/query?search_query={ARXIV_QUERY_STR}&start=0&max_results=1000"
+        url = f"http://export.arxiv.org/api/query?search_query={ARXIV_QUERY_STR}&start=0&max_results=500"
         
         curr_time = datetime.now()
         is_from_cache = None
@@ -62,7 +63,8 @@ class ArxivDownloader():
             # Generate combined text from title and summary
             articles_df['summary'] = articles_df['summary'].str.replace('\n', ' ')
             articles_df['combined_text'] = (articles_df['title'] + '. ' + articles_df['summary']).str.lower()
-        
+            articles_df['combined_text'] = articles_df['combined_text'].str[:MAX_CHARS]
+
             # Update cache
             self.latest_results = articles_df
             self.last_download_time = curr_time

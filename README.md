@@ -39,7 +39,7 @@ flask --app app:app run
 import requests
 import json
 
-url = "localhost:5000/api/query"
+url = "http://127.0.0.1:5000/api/query"
 
 payload = json.dumps({
   "query": "Attention transformers are all you need"

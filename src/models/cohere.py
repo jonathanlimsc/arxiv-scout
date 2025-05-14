@@ -5,6 +5,8 @@ import numpy as np
 from typing import List
 
 COHERE_API_KEY = os.environ.get('COHERE_API_KEY', None)
+MODEL_NAME = os.environ.get('MODEL_NAME', 'embed-english-light-v3.0')
+MODEL_BATCH_SIZE = os.environ.get('MODEL_BATCH_SIZE', 96)
 
 class CohereModel():
     def __init__(self):
@@ -29,16 +31,33 @@ class CohereModel():
         if from_cache and self.cached_embeddings is not None:
             # Retrieve text embedding for query only. Document embeddings are from cache
             query_embedding = self.client.embed(texts=[texts[0]],
-                                                model='small',
-                                                truncate='LEFT').embeddings
+                                                model=MODEL_NAME,
+                                                input_type='search_query',
+                                                truncate='END').embeddings
             # Get document embeddings from cache
             doc_embeddings = self.cached_embeddings
             res_embeddings = np.concatenate([np.array(query_embedding), doc_embeddings], axis=0)
         else:
             # Retrieve embeddings from model for all the texts
-            res_embeddings = self.client.embed(texts=texts,
-                                                model='small',
-                                                truncate='LEFT').embeddings
+            res_embeddings = []
+            query_text = texts[0]
+            doc_texts = texts[1:]
+            query_embedding = self.client.embed(texts=[query_text],
+                                                model=MODEL_NAME,
+                                                input_type='search_query',
+                                                truncate='END').embeddings
+            res_embeddings.append(query_embedding[0])
+
+            for i in range(0, len(doc_texts), MODEL_BATCH_SIZE):
+                batch_texts = texts[i:i + MODEL_BATCH_SIZE]
+                # Generate embeddings for the current batch
+                res_embeddings_batch = self.client.embed(texts=batch_texts,
+                                                        model=MODEL_NAME,
+                                                        input_type='search_document',
+                                                        truncate='END').embeddings
+                res_embeddings.extend(res_embeddings_batch)
+
+
             res_embeddings = np.array(res_embeddings)
 
             # Refresh cache, excluding the query embedding at index 0
