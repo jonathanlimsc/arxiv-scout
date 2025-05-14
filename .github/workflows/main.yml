@@ -5,7 +5,7 @@ name:
  
   # Controls when the workflow will run
 on:
-  # Triggers the workflow every 5 minutes
+  # Triggers the workflow every 10 minutes to avoid Render instance inactivity threshold (15 min)
   schedule:
     - cron: "*/10 * * * *"
  
