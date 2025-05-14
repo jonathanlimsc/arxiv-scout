@@ -9,7 +9,7 @@ from ..constants import ARXIV_CATEGORIES
 
 ARXIV_QUERY_STR = "+OR+".join(ARXIV_CATEGORIES)
 MAX_CHARS = 750
-MAX_NUM_PAPERS_TO_RETRIEVE = os.environ.get('MAX_NUM_PAPERS_TO_RETRIEVE', 50)
+MAX_NUM_PAPERS_TO_RETRIEVE = os.environ.get('MAX_NUM_PAPERS_TO_RETRIEVE', 500)
 
 class ArxivDownloader():
     def __init__(self, download_refresh_interval_days: int = 1):
